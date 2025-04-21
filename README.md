@@ -1,6 +1,6 @@
-# Australian Population Statistics – CITS1401 Project
+# Australian Population Statistics
 
-This Python script analyzes age-based population statistics across Australian regions using census-style CSV data. It was developed as part of the **CITS1401 – Problem Solving & Programming** unit at the University of Western Australia.
+This Python script analyzes age-based population statistics across Australian regions using census-style CSV data. It was developed as part of the CITS1401 unit at the University of Western Australia.
 
 ---
 
