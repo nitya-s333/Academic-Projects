@@ -1,6 +1,3 @@
-Certainly! Here’s the full **`README.md`** that you can **just copy and paste** into your repository:
-
-```markdown
 # 🧠 Automated COVID-19 Detection using Chest X-Ray Images
 
 > A deep learning pipeline built in TensorFlow/Keras to classify 7,135 chest X-ray images into four categories—COVID-19, Pneumonia, Tuberculosis, and Normal—achieving state-of-the-art accuracy with transfer learning.
@@ -61,9 +58,8 @@ Key achievements:
 
 ```bash
 pip install tensorflow numpy matplotlib seaborn scikit-learn kagglehub
-```
 
----
+
 
 ## 📁 Directory Structure
 
