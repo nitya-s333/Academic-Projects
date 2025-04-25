@@ -169,31 +169,11 @@ print("Predicted class:", np.argmax(pred), "Confidence:", np.max(pred))
 
 ---
 
-## 🔮 Future Work
-
-- 📊 **Cross-Validation** for more robust estimates  
-- 📦 **Dockerize** the inference pipeline  
-- 🌐 Deploy via **FastAPI** or **Streamlit** for clinician use  
-- 🩺 Extend to **CT scans** and **multi-modal** medical data  
-
----
 
 ## 📚 References
 
 1. Simonyan, K. & Zisserman, A. “Very Deep Convolutional Networks for Large-Scale Image Recognition.” arXiv (2014).  
-2. Kaggle dataset by jtiptj.  
+2. Kaggle dataset by jtiptj :  https://www.kaggle.com/datasets/jtiptj/chest-xray-pneumoniacovid19tuberculosis
 
 ---
 
-## 📄 License
-
-This project is released under the MIT License. See [LICENSE](LICENSE) for details.  
-```
-
----
-
-### 💡 How to Use:
-- **Copy-paste this directly** into your `README.md` file in your GitHub repository.
-- **Update your GitHub link** in the "Quick Start" section to reflect your actual repo URL.
-
-Let me know if you'd like further modifications or additions!
