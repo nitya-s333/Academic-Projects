@@ -61,9 +61,8 @@ pip install tensorflow numpy matplotlib seaborn scikit-learn kagglehub
 
 
 
-## 📁 Directory Structure
-
 ```
+## 📁 Directory Structure
 .
 ├── README.md
 ├── VGG16_From_Scratch.ipynb       # Executable Colab notebook
@@ -75,7 +74,7 @@ pip install tensorflow numpy matplotlib seaborn scikit-learn kagglehub
     └── test/
 ```
 
----
+```
 
 ## 🚀 Quick Start
 
@@ -101,7 +100,7 @@ pip install tensorflow numpy matplotlib seaborn scikit-learn kagglehub
    python chest_xray_code_vgg16.py --data_dir /path/to/data
    ```
 
----
+
 
 ## 🧱 Model Architectures
 
