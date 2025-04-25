@@ -16,9 +16,8 @@
 8. [Results & Performance](#results--performance)  
 9. [Inference](#inference)  
 10. [Confusion Matrices](#confusion-matrices)  
-11. [Future Work](#future-work)  
 12. [References](#references)  
-13. [License](#license)  
+
 
 ---
 
