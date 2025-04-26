@@ -3,8 +3,8 @@
 
 ##  Project Overview
 The goal of this project was to perform a **comparative study** of various machine learning algorithms to **detect breast cancer** using two real-world datasets:  
-- The **Wisconsin Breast Cancer Dataset** (structured, detailed feature set)  
-- The **Coimbra Breast Cancer Dataset** (small, vague features dataset)
+1)The **Wisconsin Breast Cancer Dataset** (structured, detailed feature set)  
+2)The **Coimbra Breast Cancer Dataset** (small, vague features dataset)
 We aimed to determine which algorithm performs best for each dataset and to explore how **ensemble techniques like Bagging and Stacking** can further improve model performance.
 
 ---
