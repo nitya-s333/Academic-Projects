@@ -1,4 +1,4 @@
-#  Automated COVID-19 Detection using Chest X-Ray Images
+# Deep Learning-based Chest X-ray Classification for COVID-19, Pneumonia, and Tuberculosis Detection
 
 > A deep learning pipeline built in TensorFlow/Keras to classify 7,135 chest X-ray images into four categories—COVID-19, Pneumonia, Tuberculosis, and Normal—achieving state-of-the-art accuracy with transfer learning.
 
