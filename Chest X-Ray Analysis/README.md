@@ -1,4 +1,4 @@
-# 🧠 Automated COVID-19 Detection using Chest X-Ray Images
+#  Automated COVID-19 Detection using Chest X-Ray Images
 
 > A deep learning pipeline built in TensorFlow/Keras to classify 7,135 chest X-ray images into four categories—COVID-19, Pneumonia, Tuberculosis, and Normal—achieving state-of-the-art accuracy with transfer learning.
 
@@ -36,7 +36,7 @@ Key achievements:
 
 ---
 
-## 🗂️ Dataset
+## Dataset
 
 - **Source**: [Kaggle – Chest X-Ray Pneumonia, COVID-19, Tuberculosis](https://www.kaggle.com/datasets/jtiptj/chest-x-ray-pneumoniacovid19tuberculosis)  
 - **Total images**: 7,135  
@@ -47,7 +47,7 @@ Key achievements:
 
 ---
 
-## ⚙️ Environment & Dependencies
+## Environment & Dependencies
 
 - **Python**: 3.8+  
 - **TensorFlow**: 2.x (tested on 2.10.0)  
@@ -61,7 +61,7 @@ pip install tensorflow numpy matplotlib seaborn scikit-learn kagglehub
 
 
 ```
-## 📁 Directory Structure
+##  Directory Structure
 .
 ├── README.md
 ├── VGG16_From_Scratch.ipynb       # Executable Colab notebook
@@ -75,7 +75,7 @@ pip install tensorflow numpy matplotlib seaborn scikit-learn kagglehub
 
 ```
 
-## 🚀 Quick Start
+##  Quick Start
 
 1. **Clone the repo**  
    ```bash
@@ -101,7 +101,7 @@ pip install tensorflow numpy matplotlib seaborn scikit-learn kagglehub
 
 
 
-## 🧱 Model Architectures
+##  Model Architectures
 
 ### 1. CNN from Scratch
 
@@ -119,7 +119,7 @@ pip install tensorflow numpy matplotlib seaborn scikit-learn kagglehub
 
 ---
 
-## 🧪 Training & Validation
+##  Training & Validation
 
 - **Batch Size**: 32  
 - **Image Size**: 224×224 pixels  
@@ -132,7 +132,7 @@ pip install tensorflow numpy matplotlib seaborn scikit-learn kagglehub
 
 ---
 
-## 📈 Results & Performance
+##  Results & Performance
 
 | Model                      | Train Acc. | Val Acc. | Test Acc. | Improvement |
 |----------------------------|-----------:|---------:|----------:|------------:|
@@ -144,7 +144,7 @@ pip install tensorflow numpy matplotlib seaborn scikit-learn kagglehub
 
 ---
 
-## 🎯 Inference
+##  Inference
 
 ```python
 # Load trained model
@@ -160,7 +160,7 @@ print("Predicted class:", np.argmax(pred), "Confidence:", np.max(pred))
 
 ---
 
-## 🔍 Confusion Matrices
+##  Confusion Matrices
 
 ![Confusion Matrices](confusion_matrices.png)  
 *(Train • Validation • Test)*
@@ -168,7 +168,7 @@ print("Predicted class:", np.argmax(pred), "Confidence:", np.max(pred))
 ---
 
 
-## 📚 References
+## References
 
 1. Simonyan, K. & Zisserman, A. “Very Deep Convolutional Networks for Large-Scale Image Recognition.” arXiv (2014).  
 2. Kaggle dataset by jtiptj :  https://www.kaggle.com/datasets/jtiptj/chest-xray-pneumoniacovid19tuberculosis
