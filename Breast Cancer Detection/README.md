@@ -1,5 +1,5 @@
 ---
-# 🩺 Breast Cancer Detection using Machine Learning (Wisconsin & Coimbra)
+#  Breast Cancer Detection using Machine Learning (Wisconsin & Coimbra)
 
 ##  Project Overview
 The goal of this project was to perform a **comparative study** of various machine learning algorithms to **detect breast cancer** using two real-world datasets:  
