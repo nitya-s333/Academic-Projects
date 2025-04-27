@@ -1,0 +1,212 @@
+#!/bin/bash
+# Task 1: Check if no. of arguments is exactly equal to 4, if not print an error message and exit with status 1.
+if [[ $# -ne 4 ]]; then
+    echo "Error: Expected 4 arguments." >&2
+    echo "Usage: $0 <csv_file> <year_or_country> <solar_wind|coal> <min|max>" >&2
+    exit 1
+fi
+ 
+#For better readability lets assign a variable to each input argument 
+file=$1
+query=$2
+energy=$3
+operation=$4
+
+# Validate each input argument before proceeding to ensure the type of arguments matches with our requirement and avoid any enexpected error
+
+#Task 2 :
+#Validate $file 
+#Step 1: Check if input file exists and is not empty
+#Else, print a statement indicating the problem, send to stderr and exit with status 1
+if [[ ! -s "$file" ]]; then
+    echo "Error: The specified input file $file does not exist or is empty." >&2
+    exit 1
+fi
+
+#Expected input: "file_name.csv"
+#Possible user inputs: file_name.txt, file_name.html, file_name.pdf, etc
+#Step 2: Validate the extension of file: ".csv"
+# For that we check if the last 4 characters are '.csv'
+if [[ "${file: -4}" != ".csv" ]]; then
+    echo "Error: File must have a .csv extension." >&2
+    exit 1
+fi
+
+# Step 3: Check if user entered the OWID_Solar_wind_vs_Coal file or not.
+#To verify this, let's check the header to see if it contains the expected 5 columns required for processing
+header=$(head -n 1 "$file")
+
+# Check column names (case sensitive)
+if ! echo "$header" | grep -q "Country" || \
+   ! echo "$header" | grep -q "Code" || \
+   ! echo "$header" | grep -q "Year" || \
+   ! echo "$header" | grep -q "SolarWindTWh" || \
+   ! echo "$header" | grep -q "CoalTWh"; then
+# If any of the above checks fail, then exit the script with status 1 to indicate an error and print the error.
+    echo "Error: CSV file must contain the following columns in header:" >&2
+    echo "  Country, Code, Year, SolarWindTWh, CoalTWh" >&2
+    exit 1
+fi
+
+# Task 3: Validate second argument: $query
+#Expected input- 4 digit year or country code (Usually 3 or 2 characters long)
+#Possible user inputs: 02, 25,ind, Ind, AFg
+
+#Solution: Year should be 4 digits and case sensitivity should be handled in case of country code 
+if [[ "$query" =~ ^[0-9]{4}$ ]]; then
+    is_year=true #we use this when we read from csv for our main logic
+elif [[ "$query" =~ ^[a-zA-Z]{2,3}$ ]]; then
+    is_year=false
+    # Normalize country code to uppercase for consistency
+    query=$(echo "$query" | tr '[:lower:]' '[:upper:]')
+else
+    echo "Error: Second argument '$query' must be either a 4-digit year or a valid 2–3 letter country code." >&2
+    exit 1
+fi
+
+# Task 4:
+#Validate third argument: $energy
+#Expected inputs are: coal or solar_wind. However, the user can enter "CoaL" or "SoLaR_Wind" and code might exit despite correct input #due to inability to handle case senstivity.
+
+# Convert the energy type to lowercase to handle any case variations
+energy=$(echo "$energy" | tr '[:upper:]' '[:lower:]')
+
+# The program can also exit if the user omits the underscore "_" in "solar_winds"
+#To handle this, we normalize solarwind to solar_wind
+if [[ "$energy" == "solarwind" ]]; then
+    energy="solar_wind"
+fi
+
+# Now check whether the input matches with either "coal" or "solar_winds". If not, indicate the error and exit.
+if [[ "$energy" != "solar_wind" && "$energy" != "coal" ]]; then
+    echo "Error: Invalid energy type '$energy'. Expected 'solar_wind' or 'coal'." >&2
+    exit 1
+fi
+
+# Task 5:
+#Validate argument 4 : $operation
+#Expected input- "min" or "max"
+#Possible User input: "Minimum","Maximum","MIN","MAx",etc
+#Solution: Handle case senstitvity and then map 'minimum' to 'min' and 'maximum' to 'max'
+
+# Normalize operation to lowercase to handle case-insensitive inputs like 'MIN', 'Maximum', etc.
+operation=$(echo "$operation" | tr '[:upper:]' '[:lower:]')
+
+# Map 'minimum' to 'min' and 'maximum' to 'max'
+if [[ "$operation" == "min" || "$operation" == "minimum" ]]; then
+    operation="minimum"
+elif [[ "$operation" == "max" || "$operation" == "maximum" ]]; then
+    operation="maximum"
+fi
+
+# Final check to ensure the operation is either 'min' or 'max'
+if [[ "$operation" != "minimum" && "$operation" != "maximum" ]]; then
+    echo "Error: Unknown operation '$operation'. Expected 'min', 'max', 'minimum' or 'maximum'." >&2
+    exit 1
+fi
+
+
+#Task 6:
+#Since the validations for all inputs is now complete, let's build our main logic.
+#Depending on the energy type, we must determine which column to analyze from the CSV
+# case 1:if $energy= "solar_wind", then it corresponds to the 4th column: SolarWindTWh
+# case 2:if $energy= "coal", corresponds to the 5th column: CoalTWh
+column=0
+if [[ "$energy" == "solar_wind" ]]; then
+    column=3 
+else
+    column=4
+fi
+#since the indexing start from 0 so to selct 4 th column we use 3 and for 5th column we use 4.
+
+# Task 7:
+# To extract the data from the CSV file, we skip the header (first line) and store it in a temporary file for easier processing in the #next steps
+tail -n +2 "$file" > .data_temp.csv
+
+#Now that we extracted the data, let's initialize a variable to store the line containing the final result 
+
+result_line="" 
+
+# Task 8:
+# Determine whether input is a year or a country code
+if [[ "$query" =~ ^[0-9]{4}$ ]]; then
+    # If a year is specified, we extract all the countries in a given year, sort them by energy_value(coal or solar_wind)
+    #and finally sort them numerically. This allows finding the country with min/max energy usage in that year.
+    # We use grep to find lines containing the year, then cut to extract the relevant columns:
+    # Country Name, Country Code, SolarWindTWh, and CoalTWh.
+    # Then,we sort the results numerically as per the energy column (solar_wind or coal)
+    # to find the country with the min or max energy usage for that year.
+    result_line=$(grep ",${query}," .data_temp.csv | cut -d',' -f1,2,4,5 | sort -t',' -k${column},${column}n)
+else
+    # If a country code is specified, we search for all entries that match the country code across all years.
+    # Then we extract the relevant columns and sort by the energy value and store in the variable "result_line"
+      # If a country code is specified, we extract all records for that country across all years.
+    # Again we use grep to find the country, then cut the relevant columns (Country, Code, Year, SolarWindTWh, CoalTWh),
+    # and sort them numerically by the chosen energy column to find the min/max year.
+    result_line=$(grep ",${query}," .data_temp.csv | cut -d',' -f1,2,3,4,5 | sort -t',' -k$(($column + 1)),$(($column + 1))n)
+fi
+
+#Task 9:
+#Check if any matching line was found. If not, it prints an error message and exits the script after deleting the temporry file beacuse
+# clutters the working directory and could possibly mess up future runs of the script or might contain sensitive or outdated data.Hence
+# removing it is a good scripting practice.
+if [[ -z "$result_line" ]]; then
+    echo "Error: No data found for $query." >&2
+    rm .data_temp.csv
+    exit 1
+fi
+
+#Task 10:
+ # Perform min or max operation on the sorted data as per the 4th argument: $operation.
+# Since data is sorted numerically in ascending order:
+# - For max: take the last line (tail -n 1)
+# - For min: take the first line (head -n 1)
+if [[ "$operation" == "maximum" ]]; then
+     final_line=$(echo "$result_line" | tail -n 1)
+else
+     final_line=$(echo "$result_line" | head -n 1)
+fi
+
+# Task 11: Parse the results
+
+# The final output line is based on whether the query was a year or a country code.
+# The output always includes the 5 required components:
+# 1. Year
+# 2. Country name
+# 3. Country code
+# 4. Energy type (solar and wind or coal)
+# 5. Whether it was the minimum or maximum value and the amount of energy produced (in TWh)
+#
+# Case 1: If the input query was a year, the script reports which country had the minimum or maximum production of the selected energy type in that year.
+#
+# Case 2: If the input query was a country code, it reports the year when that country had the minimum or maximum production of the selected energy type.
+# This ensures the output is always meaningful and matches the assignment's specifications
+
+if [[ "$query" =~ ^[0-9]{4}$ ]]; then
+    # If year is entered:
+    country_name=$(echo "$final_line" | cut -d',' -f1)
+    country_code=$(echo "$final_line" | cut -d',' -f2)
+    val1=$(echo "$final_line" | cut -d',' -f3)
+    val2=$(echo "$final_line" | cut -d',' -f4)
+
+    amount=$( [[ $energy == "solar_wind" ]] && echo "$val1" || echo "$val2" )
+    energy_display=$( [[ $energy == "solar_wind" ]] && echo "solar and wind" || echo "coal" )
+
+    echo "The $operation amount of electrical energy produced from $energy_display in $query was $amount TWh by $country_name ($country_code)."
+
+else
+    # If country code is entered:
+    country_name=$(echo "$final_line" | cut -d',' -f1)
+    country_code=$(echo "$final_line" | cut -d',' -f2)
+    year=$(echo "$final_line" | cut -d',' -f3)
+    val1=$(echo "$final_line" | cut -d',' -f4)
+    val2=$(echo "$final_line" | cut -d',' -f5)
+
+    amount=$( [[ $energy == "solar_wind" ]] && echo "$val1" || echo "$val2" )
+    energy_display=$( [[ $energy == "solar_wind" ]] && echo "solar and wind" || echo "coal" )
+
+    echo "The $operation amount of electrical energy produced from $energy_display by $country_name ($country_code) was $amount TWh in $year."
+fi
+
+#Task 12: Delete the temporary file to prevent and errors in the future, for data security, memory cluttering, etc
+rm .data_temp.csv
